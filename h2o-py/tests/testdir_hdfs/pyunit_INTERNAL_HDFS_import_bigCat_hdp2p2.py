@@ -25,17 +25,18 @@ def hdfs_import_bigCat():
                     "/datasets/bigCatFiles/hundredThousandCat100C.csv", "/datasets/bigCatFiles/oneMillionCat100C.csv",
                     "/datasets/bigCatFiles/tenThousandCat1000C.csv",
                     "/datasets/bigCatFiles/hundredThousandCat1000C.csv", "/datasets/bigCatFiles/oneMillionCat1000C.csv"]
+        reps = [10, 10, 10, 100, 100, 100, 1000, 1000, 1000]
 
         for ind in range(0,len(allFiles)):  # run tests for 3 different sizes per Tomas request
             print("*******  Parsing file {0} ********".format(allFiles[ind]))
-            runPerformance("hdfs://{0}{1}".format(hdfs_name_node, allFiles[ind]), numTimes)
+            runPerformance("hdfs://{0}{1}".format(hdfs_name_node, allFiles[ind]), numTimes, reps[ind])
 
     else:
         raise EnvironmentError
 
 
-def runPerformance(url_csv, numTimes):
-    columntypes = ["enum"]*10
+def runPerformance(url_csv, numTimes, numRepeats):
+    columntypes = ["enum"]*numRepeats
     runtimes = []
 
     for ind in range(0, numTimes):
