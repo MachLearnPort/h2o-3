@@ -161,7 +161,7 @@ public class PCA extends ModelBuilder<PCAModel,PCAModel.PCAParameters,PCAModel.P
       pca._output._catOffsets = svd._output._catOffsets;
       pca._output._nobs = svd._output._nobs;
       if (_parms._k != svd._parms._nv) {  // not enough eigenvalues was found.
-        _job.warn("_train: Dataset is rank deficient.  _parms._k was "+_parms._k+" and is now set to "+svd._parms._nv);
+        _job.warn("_train PCA: Dataset is rank deficient.  _parms._k was "+_parms._k+" and is now set to "+svd._parms._nv);
         pca._parms._k = svd._parms._nv;
         _parms._k = svd._parms._nv;
       }

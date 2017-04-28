@@ -214,7 +214,7 @@ public class SVD extends ModelBuilder<SVDModel,SVDModel.SVDParameters,SVDModel.S
           model._output._history_err.add(err);
           model._output._history_eigenVectorIndex.add((double) eigIndex);
         } else {
-          _job.warn("_train: Dataset is rank deficient.  User specified "+_parms._nv);
+          _job.warn("_train SVD: Dataset is rank deficient.  User specified "+_parms._nv);
           _matrixRankReached = true;
           break;
 
@@ -318,7 +318,7 @@ public class SVD extends ModelBuilder<SVDModel,SVDModel.SVDParameters,SVDModel.S
 
         if (yqfrm.hasInfs()) {  // dataset is rank deficient, reduce _nv to fit the true rank better
           _matrixRankReached=true;  // count when bad infinity or NaNs appear to denote problem;
-          String warnMessage = "_train: Dataset is rank deficient.  _parms._nv was "+_parms._nv;
+          String warnMessage = "_train SVD: Dataset is rank deficient.  _parms._nv was "+_parms._nv;
           for (int colIndex = ybig.numCols(); colIndex < yqfrm.numCols(); colIndex++) {
             if (yqfrm.vec(colIndex).pinfs() > 0) {
               _parms._nv = colIndex-ybig.numCols();
@@ -330,6 +330,8 @@ public class SVD extends ModelBuilder<SVDModel,SVDModel.SVDParameters,SVDModel.S
           gt = ArrayUtils.gaussianArray(_parms._nv, _ncolExp, _parms._seed);
           rtsk = new RandSubInit(_job._key, dinfo, gt);
           rtsk.doAll(_parms._nv, Vec.T_NUM, dinfo._adaptedFrame);
+          ybig.remove();
+          yinfo.remove();
           ybig = rtsk.outputFrame(Key.<Frame>make(), null, null);
           yinfo = new DataInfo(ybig, null, true, DataInfo.TransformType.NONE, true, false, false);
           DKV.put(yinfo._key, yinfo);
@@ -607,7 +609,7 @@ public class SVD extends ModelBuilder<SVDModel,SVDModel.SVDParameters,SVDModel.S
             if (stop_requested()) break;
             if (_matrixRankReached) { // number of eigenvalues found is less than _nv
               int newk = k-1;
-              _job.warn("_train: Dataset is rank deficient.  _parms._nv was "+_parms._nv+" and is now set to "+newk);
+              _job.warn("_train SVD: Dataset is rank deficient.  _parms._nv was "+_parms._nv+" and is now set to "+newk);
               _parms._nv = newk;   // change number of eigenvector parameters to be the actual number of eigenvectors found
               break;
             }

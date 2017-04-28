@@ -23,9 +23,10 @@ public class LinearAlgebraUtils {
    */
   public static Frame generateFrameOfZeros(int rowCount, int colCount) {
     assert (rowCount > 0) && (colCount > 0);  // make sure we have positive row and column numbers
-
     Vec tempVec = Vec.makeZero(rowCount);
-    return(new Frame(tempVec.makeZeros(colCount)));  // return a frame of zeros with size rowCount by colCount
+    Frame allZeros = new Frame(tempVec.makeZeros(colCount));
+    tempVec.remove();
+    return(allZeros);  // return a frame of zeros with size rowCount by colCount
   }
 
   /*
